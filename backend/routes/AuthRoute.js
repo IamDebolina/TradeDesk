@@ -3,16 +3,18 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { UserModel } = require("../models/UserModel");
 
+const isProd = process.env.NODE_ENV === "production";
+
 const cookieOptions = {
-  httpOnly: true, // JavaScript in the browser can't read it (safer)
+  httpOnly: true,
   sameSite: "lax",
-  maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
+  secure: isProd,
+  maxAge: 3 * 24 * 60 * 60 * 1000,
 };
 
 const createToken = (id) =>
   jwt.sign({ id }, process.env.TOKEN_KEY, { expiresIn: "3d" });
 
-// SIGNUP
 router.post("/signup", async (req, res) => {
   try {
     const { email, username, password } = req.body;
@@ -42,7 +44,6 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// LOGIN
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -69,13 +70,11 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// LOGOUT
 router.post("/logout", (req, res) => {
-  res.clearCookie("token", { httpOnly: true, sameSite: "lax" });
+  res.clearCookie("token", { httpOnly: true, sameSite: "lax", secure: isProd });
   res.json({ success: true, message: "Logged out" });
 });
 
-// VERIFY: dashboard calls this to check if the user is logged in
 router.get("/verify", async (req, res) => {
   const token = req.cookies.token;
   if (!token) return res.json({ status: false });

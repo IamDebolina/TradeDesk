@@ -1,12 +1,13 @@
 import React, {useState,useEffect} from "react";
 //import { holdings } from "../data/data";
 import axios from "axios"
+import { BACKEND_URL } from "../config";
 
 const Holdings = () => {
   const[allHoldings, setAllHoldings] = useState([])
 
   useEffect(() => {
-  axios.get("http://localhost:3002/allHoldings").then((res)=>
+  axios.get(`${BACKEND_URL}/allHoldings`).then((res)=>
   {
     console.log(res.data)
     setAllHoldings(res.data)

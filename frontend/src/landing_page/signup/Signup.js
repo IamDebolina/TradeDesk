@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
-const BACKEND_URL = "http://localhost:3002";
-const DASHBOARD_URL = "http://localhost:3001";
+import { BACKEND_URL, DASHBOARD_URL } from "../../config";
 
 function Signup() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -22,7 +20,7 @@ function Signup() {
       const res = await fetch(`${BACKEND_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // needed so the cookie gets saved
+        credentials: "include",
         body: JSON.stringify(form),
       });
       const data = await res.json();
@@ -32,9 +30,9 @@ function Signup() {
       } else {
         setError(data.message);
       }
-       } catch (err) {
+    } catch (err) {
       console.error(err);
-      setError("Error: " + err.message);
+      setError("Cannot reach the server. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -47,42 +45,20 @@ function Signup() {
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="username" className="form-label">Username</label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            className="form-control"
-            value={form.username}
-            onChange={handleChange}
-            required
-          />
+          <input id="username" name="username" type="text" className="form-control"
+            value={form.username} onChange={handleChange} required />
         </div>
 
         <div className="mb-3">
           <label htmlFor="email" className="form-label">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            className="form-control"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
+          <input id="email" name="email" type="email" className="form-control"
+            value={form.email} onChange={handleChange} required />
         </div>
 
         <div className="mb-3">
           <label htmlFor="password" className="form-label">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            className="form-control"
-            value={form.password}
-            onChange={handleChange}
-            minLength={6}
-            required
-          />
+          <input id="password" name="password" type="password" className="form-control"
+            value={form.password} onChange={handleChange} minLength={6} required />
         </div>
 
         {error && <p className="text-danger">{error}</p>}

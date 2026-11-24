@@ -4,9 +4,7 @@ import axios from "axios";
 import Dashboard from "./Dashboard";
 import TopBar from "./TopBar";
 import UserContext from "./UserContext";
-
-const BACKEND_URL = "http://localhost:3002";
-const LOGIN_URL = "http://localhost:3000/login";
+import { BACKEND_URL, LOGIN_URL } from "../config";
 
 const Home = () => {
   const [username, setUsername] = useState(null);
@@ -19,10 +17,10 @@ const Home = () => {
         if (res.data.status) {
           setUsername(res.data.user);
         } else {
-          window.location.href = LOGIN_URL; // not logged in
+          window.location.href = LOGIN_URL;
         }
       })
-      .catch(() => setError("Cannot reach the server. Is the backend running?"));
+      .catch(() => setError("Cannot reach the server. Please try again."));
   }, []);
 
   if (error) return <p style={{ padding: "20px" }}>{error}</p>;

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
-const BACKEND_URL = "http://localhost:3002";
-const DASHBOARD_URL = "http://localhost:3001";
+import { BACKEND_URL, DASHBOARD_URL } from "../../config";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -32,8 +30,9 @@ function Login() {
       } else {
         setError(data.message);
       }
-    } catch {
-      setError("Cannot reach the server. Is the backend running?");
+    } catch (err) {
+      console.error(err);
+      setError("Cannot reach the server. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -46,28 +45,14 @@ function Login() {
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            className="form-control"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
+          <input id="email" name="email" type="email" className="form-control"
+            value={form.email} onChange={handleChange} required />
         </div>
 
         <div className="mb-3">
           <label htmlFor="password" className="form-label">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            className="form-control"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
+          <input id="password" name="password" type="password" className="form-control"
+            value={form.password} onChange={handleChange} required />
         </div>
 
         {error && <p className="text-danger">{error}</p>}
